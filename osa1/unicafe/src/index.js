@@ -23,7 +23,7 @@ const Statistiscs = ({tila}) => {
             <Statistic otsikko="neutraali" arvo={tila.neutraali} />
             <Statistic otsikko="huono" arvo={tila.huono} />
             <Statistic otsikko="keskiarvo" arvo={ Math.round( (tila.hyva * 1 + tila.huono * -1) / (tila.hyva + tila.neutraali + tila.huono)*10) / 10} />
-            <Statistic otsikko="positiivisa" arvo={"" + Math.round((tila.hyva * 100 / (tila.hyva + tila.neutraali + tila.huono)) * 10) / 10 + " %"} />             
+            <Statistic otsikko="positiivisia" arvo={"" + Math.round((tila.hyva * 100 / (tila.hyva + tila.neutraali + tila.huono)) * 10) / 10 + " %"} />             
         </table>
     )
 
