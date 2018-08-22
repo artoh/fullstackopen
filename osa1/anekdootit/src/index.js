@@ -23,12 +23,18 @@ class App extends React.Component {
   }
 
   render() {
+    const enitenpisteita = Math.max.apply(Math, this.state.pisteet);
+    const indeksi = this.state.pisteet.indexOf( enitenpisteita)
     return (
       <div>
         {this.props.anecdotes[this.state.selected]}<br/>
         has {this.state.pisteet[this.state.selected]} votes <br />
-        <button onClick={this.arvo}>next anecdote</button>
         <button onClick={this.aanesta}>vote</button>
+        <button onClick={this.arvo}>next anecdote</button>        
+        <h2>anecdote with most votes:</h2>
+        {anecdotes[indeksi]}<br />
+        has {enitenpisteita} votes
+        
       </div>
     )
   }
