@@ -1,12 +1,12 @@
 import React from 'react';
-
+import axios from 'axios'
 
 
 const Henkilo = ({henkilo}) => {
   return(
     <tr>
       <td>{henkilo.name}</td>
-      <td>{henkilo.phone}</td>
+      <td>{henkilo.number}</td>
     </tr>
   )
 }
@@ -14,9 +14,11 @@ const Henkilo = ({henkilo}) => {
 
 const Luettelo = ({henkilot}) => {
   return(
-    <tr>
-      { henkilot.map( henkilo => <Henkilo henkilo={henkilo} key={henkilo.name} />)}
-    </tr>
+    <table>
+      <tbody>
+        { henkilot.map( henkilo => <Henkilo henkilo={henkilo} key={henkilo.name} />)}
+      </tbody>
+    </table>
   )
 }
 
@@ -26,7 +28,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas', phone: '045-3235235' }
+        { name: 'Arto Hellas', number: '045-3235235' }
       ],
       newName: '',
       newPhone: '',
@@ -43,7 +45,7 @@ class App extends React.Component {
     }
     else
     {
-      const uusihenkilo = { name: this.state.newName, phone: this.state.newPhone }
+      const uusihenkilo = { name: this.state.newName, number: this.state.newPhone }
       const henkilot = this.state.persons.concat(uusihenkilo)
       this.setState({
         persons: henkilot,
@@ -67,6 +69,16 @@ class App extends React.Component {
     this.setState({suodatus: event.target.value})
   }
 
+  componentDidMount() {
+    console.log('did mount')
+    axios
+      .get("http://localhost:3008/persons")
+      .then(response => {
+        console.log("Vastaus tuli")
+        this.setState({persons: response.data})
+      })
+  }
+
   render() {
 
 
@@ -88,9 +100,7 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        <table><tbody>
-          <Luettelo henkilot={this.state.persons.filter( henkilo => henkilo.name.toLowerCase().indexOf( this.state.suodatus.toLowerCase() ) > -1 ) } />
-        </tbody></table>
+          <Luettelo henkilot={this.state.persons.filter( henkilo => henkilo.name.toLowerCase().indexOf( this.state.suodatus.toLowerCase() ) > -1 ) } />        
       </div>
     )
   }
