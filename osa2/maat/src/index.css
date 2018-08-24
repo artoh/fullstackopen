@@ -3,3 +3,10 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+img
+{
+  max-width: 30%;
+  height: auto;
+  height: auto;
+}

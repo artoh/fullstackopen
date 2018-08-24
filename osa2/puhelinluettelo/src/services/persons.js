@@ -16,4 +16,10 @@ const poista = (id) => {
     return axios.delete(baseUrl + "/" + id  )    
 }
 
-export default { getAll, create, poista }
+const paivita = (henkilo) =>
+{
+    const request = axios.put(baseUrl + "/" + henkilo.id, henkilo)
+    return request.then( response => response.data )
+}
+
+export default { getAll, create, poista, paivita }

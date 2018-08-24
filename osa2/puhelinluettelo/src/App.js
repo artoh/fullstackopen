@@ -12,6 +12,24 @@ const Henkilo = ({henkilo, poistaja}) => {
 }
 
 
+const Viesti = ({viesti}) => {
+  console.log("Viesti " + viesti)  
+  if( viesti != null )
+  {
+    return(
+      <div className="viesti">
+        {viesti}
+      </div>
+    )
+  }
+  else
+  {
+    return (
+      <div></div>
+    )
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -21,16 +39,56 @@ class App extends React.Component {
       ],
       newName: '',
       newPhone: '',
-      suodatus: ''
+      suodatus: '',
+      viesti: null
     }
   }
 
   lisaaHenkilo = (event) => {
     event.preventDefault()
+    
     if( this.state.persons.some( (henkilo) => henkilo.name === this.state.newName )  )
     {
-      window.alert("Henkilö on jo luettelossa!") 
-      this.setState( {newName: '', newPhone: ''})     
+      const henkilo = this.state.persons.find(henkilo => henkilo.name === this.state.newName)
+      if( window.confirm(henkilo.name + " on jo luettelossa, korvataanko vanha numero uudella?") )
+      {
+        henkilo.number = this.state.newPhone;
+        const henkilot = this.state.persons.filter( hlo => hlo.id !== henkilo.id)        
+
+        personService
+          .paivita(henkilo)
+          .then( paivitetty => {
+            this.setState({
+              persons: henkilot.concat(paivitetty),
+              newName : '',
+              newPhone : '',
+              viesti: 'päivitettiin ' + paivitetty.name
+            })
+            setTimeout(() => this.setState({viesti : null}), 5000)
+          } )
+          .catch(error => {
+            // Henkilön tiedot on jo poistettu
+            // Lisätään henkilö uudelleen palvelimelle
+            console.log(henkilo.name + " ehdittiin jo poistaa")
+            const uusihenkilo = { name: this.state.newName, number: this.state.newPhone }
+            
+            personService
+            .create(uusihenkilo)
+            .then( uusihenkilo => { 
+              this.setState({
+                persons: henkilot.concat(uusihenkilo),
+                newName: '',
+                newPhone: '',
+                viesti: 'palautettiin ' + uusihenkilo.name
+              })    
+              setTimeout(() => this.setState({viesti : null}), 5000)
+            })            
+          })
+      }
+      else
+      {
+        this.setState( {newName: '', newPhone: ''})     
+      }
     }
     else
     {
@@ -42,8 +100,10 @@ class App extends React.Component {
           this.setState({
             persons: henkilot,
             newName: '',
-            newPhone: ''
-          })    
+            newPhone: '',
+            viesti: 'lisättiin ' + uusihenkilo.name
+          })   
+          setTimeout(() => this.setState({viesti : null}), 5000) 
         })
 
       console.log("Uusi henkilö ", uusihenkilo.name)
@@ -60,7 +120,8 @@ class App extends React.Component {
             if(response.status === 200)
             {
               const henkilot = this.state.persons.filter( hlo => henkilo.id !== hlo.id)
-              this.setState({persons: henkilot})
+              this.setState({persons: henkilot, viesti: 'poistettiin ' + henkilo.name})
+              setTimeout(() => this.setState({viesti : null}), 5000)
             }
           })
         }
@@ -101,12 +162,13 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <Viesti viesti={this.state.viesti} />
         <div>
           rajaa näytettäviä <input value={this.state.suodatus} onChange={this.handleFilter} />
         </div>
         <form onSubmit={this.lisaaHenkilo}>
           <div>
-            <h2>Lisää uusi</h2>
+            <h2>Lisää uusi / muuta olemassaolevaa numeroa</h2>
             nimi: <input value={this.state.newName} onChange={this.handleNameChange}/><br/>
             numero: <input value={this.state.newPhone} onChange={this.handlePhoneChange} />
           </div>

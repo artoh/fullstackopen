@@ -3,3 +3,11 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.viesti {
+  background-color: chartreuse;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 3px;
+  margin: 1em 1em 1em 1em;
+}

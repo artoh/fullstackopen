@@ -7,7 +7,7 @@ const Maa = ({maa}) => (
     <h2>Nimi {maa.name} {maa.nativeName}</h2>
     <p>capital: {maa.capital}</p>
     <p>population: {maa.population}</p>
-    <img src={maa.flag} />
+    <img src={maa.flag} alt="Flag of {maa.name}" />
   </div>
 )
 
@@ -55,7 +55,7 @@ class App extends Component {
           </ul>        
         }
         { suodatettu.length > 10 && <p>too many maches, specify another filter</p> }
-        { suodatettu.length == 1 && <Maa maa={suodatettu[0]} />}
+        { suodatettu.length === 1 && <Maa maa={suodatettu[0]} />}
       </div>
     );
   }
