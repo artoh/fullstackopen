@@ -1,24 +1,13 @@
 import React from 'react';
-import axios from 'axios'
+import personService from "./services/persons"
 
-
-const Henkilo = ({henkilo}) => {
+const Henkilo = ({henkilo, poistaja}) => {
   return(
     <tr>
       <td>{henkilo.name}</td>
       <td>{henkilo.number}</td>
+      <td><button onClick={poistaja}>Poista</button></td>
     </tr>
-  )
-}
-
-
-const Luettelo = ({henkilot}) => {
-  return(
-    <table>
-      <tbody>
-        { henkilot.map( henkilo => <Henkilo henkilo={henkilo} key={henkilo.name} />)}
-      </tbody>
-    </table>
   )
 }
 
@@ -46,15 +35,38 @@ class App extends React.Component {
     else
     {
       const uusihenkilo = { name: this.state.newName, number: this.state.newPhone }
-      const henkilot = this.state.persons.concat(uusihenkilo)
-      this.setState({
-        persons: henkilot,
-        newName: '',
-        newPhone: ''
-      })
+      personService
+        .create(uusihenkilo)
+        .then( uusihenkilo => { 
+          const henkilot = this.state.persons.concat(uusihenkilo)
+          this.setState({
+            persons: henkilot,
+            newName: '',
+            newPhone: ''
+          })    
+        })
+
       console.log("Uusi henkilö ", uusihenkilo.name)
     }
   }
+
+  poistaHenkilo = (henkilo) => {
+    return () => {
+      if( window.confirm("Poistetaanko " + henkilo.name ))
+      {
+        personService
+          .poista(henkilo.id)
+          .then( response => {
+            if(response.status === 200)
+            {
+              const henkilot = this.state.persons.filter( hlo => henkilo.id !== hlo.id)
+              this.setState({persons: henkilot})
+            }
+          })
+        }
+      }
+  }
+
 
   handleNameChange = (event) => {
     console.log("Uusi nimi ", event.target.value)
@@ -71,16 +83,20 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log('did mount')
-    axios
-      .get("http://localhost:3008/persons")
+
+    personService
+      .getAll()
       .then(response => {
         console.log("Vastaus tuli")
-        this.setState({persons: response.data})
+        this.setState({persons: response})        
       })
+      .catch( error => { console.log("Palvelinvirhe")})
   }
 
   render() {
 
+    const suodatettu = this.state.persons.filter( henkilo => henkilo.name.toLowerCase().indexOf( this.state.suodatus.toLowerCase()  ) > -1  )
+    
 
     return (
       <div>
@@ -100,7 +116,11 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-          <Luettelo henkilot={this.state.persons.filter( henkilo => henkilo.name.toLowerCase().indexOf( this.state.suodatus.toLowerCase() ) > -1 ) } />        
+          <table>
+            <tbody>
+              { suodatettu.map( henkilo => <Henkilo henkilo={henkilo} key={henkilo.name}  poistaja={this.poistaHenkilo(henkilo)}/>)}
+            </tbody>
+          </table>
       </div>
     )
   }
