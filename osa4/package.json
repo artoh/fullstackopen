@@ -1,0 +1,20 @@
+{
+  "name": "blogs",
+  "version": "0.0.1",
+  "description": "Blogisovellus Full Stack Open ",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "jest --verbose",
+    "start": "node index.js",
+    "watch": "nodemon index.js"
+  },
+  "author": "Arto Hyvättinen",
+  "license": "ISC",  
+  "jest": {
+    "testEnvironment" : "node"
+  }  
+}
