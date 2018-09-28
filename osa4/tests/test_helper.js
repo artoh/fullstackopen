@@ -1,4 +1,4 @@
-const Blog = require('/models/blog')
+const Blog = require('../models/blog')
 
 
 const initBlogs = [
@@ -52,26 +52,6 @@ const initBlogs = [
     }  
   ]
 
-const format = (blog) => {
-  return {
-    author: blog.author,
-    title: blog.title,
-    url: blog.url,
-    likes: blog.likes,
-    id: blog.id
-  }
-}  
-
-
-const nonExistingId = async () => {
-      const blog = new Blog()
-      await blog.save()
-      await blog.remove()
-
-      return blog._id.toString()
-  }
-
-  const blogsInDb = async () => {
-      const blogs = await Blog.find({})
-      return blogs.map(format)
+  module.exports = {
+    initBlogs
   }
