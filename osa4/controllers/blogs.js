@@ -48,30 +48,55 @@ blogsRouter.post('/', async (request, response) => {
     }
   })
 
-  blogsRouter.delete('/:id', async (request, response) => {
-    await Blog.findOneAndDelete({_id: request.params.id})
-    response.status(204).end()
+  blogsRouter.delete('/:id', async (request, response) => {    
+    try {
+      const blog = await Blog.findOne({_id: request.params.id})    
+      if( !blog)  {
+        response.status(404).end()      
+      } else if( blog.user && blog.user.toString() === request.user ) {
+        await Blog.findOneAndDelete({_id: request.params.id})
+        response.status(204).end()
+      } else {
+        console.log( blog.user + " " + request.user)
+        response.status(401).json({error: 'No credits to remove'})
+      }
+    } catch (poikkeus ) {
+        console.log(poikkeus)
+        response.status(500).json({error: 'Something went wrong...'})
+    }
   })
 
 
   blogsRouter.put('/:id', async (request, response) => {
+   
     try {
-      const body = request.body
-      const blogi = { 
-        author: body.author,
-        title: body.title,
-        url: body.url,
-        likes: body.likes
+
+      const blog = await Blog.findOne({_id: request.params.id})    
+      if( !blog)  {
+        response.status(404).end()      
+      } else if( blog.user && blog.user.toString() === request.user ) {
+
+        const body = request.body
+        const blogi = { 
+          author: body.author,
+          title: body.title,
+          url: body.url,
+          likes: body.likes
+        }
+  
+        uusi = await Blog.
+          findOneAndUpdate( {_id: request.params.id} , blogi, {new:true} )
+          
+        if( uusi === null)
+          response.status(400).json({error: 'bad request'})
+        else
+          response.json(uusi)
+
+      } else {
+        response.status(401).json({error: 'No credits to update'})
       }
 
-      uusi = await Blog.
-        findOneAndUpdate( {_id: request.params.id} , blogi, {new:true} )
-      
 
-      if( uusi === null)
-        response.status(400).json({error: 'bad request'})
-      else
-        response.json(uusi)
     } catch( exception ) {
       console.log( esception )
       response.status(400).send({ error: 'malformatted id'})
