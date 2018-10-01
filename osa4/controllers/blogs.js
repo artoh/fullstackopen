@@ -1,35 +1,49 @@
 
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-blogsRouter.get('/', (request, response) => {
-    Blog
-      .find({})
-      .then(blogs => {
-        response.json(blogs)
-      })
-  })
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog
+    .find({})
+    .populate('user',{username:1, name:1})
+  response.json( blogs.map(Blog.format) )
   
-blogsRouter.post('/', (request, response) => {
+})
+  
+blogsRouter.post('/', async (request, response) => {
 
   try {
     const uusi = request.body
 
+    if( request.user === undefined) {
+      return response.status(401).json({error: 'token missing or invalid'})
+    }
+
     if( uusi.likes === undefined)
        uusi.likes = 0
     if( uusi.title == undefined || uusi.url === undefined) 
-      response.status(400).json({error:'Title and url must not be empty'})
+      return response.status(400).json({error:'Title and url must not be empty'})
 
-    const blog = new Blog(uusi)
+    const user = await User.findById( request.user)
+
+    const blog = new Blog({
+      title: uusi.title,
+      author: uusi.author,
+      url: uusi.url,
+      likes: uusi.likes,
+      user: user._id
+    })
   
-    blog
-      .save()
-      .then(result => {
-        response.status(201).json(result)
-      })
+    const savedBlog = await blog.save()
 
-    } catch (excpetion) {
-      console.log( exception)
+    user.blogs = user.blogs.concat( savedBlog._id)
+    await user.save()
+
+    response.status(201).json( Blog.format( savedBlog ) )
+
+    } catch ( poikkeus ) {
+      console.log( poikkeus )
       response.status(400).send({error: 'malformatted id'})
     }
   })

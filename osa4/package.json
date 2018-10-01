@@ -4,7 +4,8 @@
   "description": "Blogisovellus Full Stack Open ",
   "main": "index.js",
   "dependencies": {
-    "bcrypt": "^3.0.1"
+    "bcrypt": "^3.0.1",
+    "jsonwebtoken": "^8.3.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
