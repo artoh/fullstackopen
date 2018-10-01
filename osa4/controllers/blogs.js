@@ -12,6 +12,7 @@ blogsRouter.get('/', (request, response) => {
   
 blogsRouter.post('/', (request, response) => {
 
+  try {
     const uusi = request.body
 
     if( uusi.likes === undefined)
@@ -26,6 +27,11 @@ blogsRouter.post('/', (request, response) => {
       .then(result => {
         response.status(201).json(result)
       })
+
+    } catch (excpetion) {
+      console.log( exception)
+      response.status(400).send({error: 'malformatted id'})
+    }
   })
 
   blogsRouter.delete('/:id', async (request, response) => {
@@ -35,22 +41,27 @@ blogsRouter.post('/', (request, response) => {
 
 
   blogsRouter.put('/:id', async (request, response) => {
-    const body = request.body
-    const blogi = { 
-      author: body.author,
-      title: body.title,
-      url: body.url,
-      likes: body.likes
+    try {
+      const body = request.body
+      const blogi = { 
+        author: body.author,
+        title: body.title,
+        url: body.url,
+        likes: body.likes
+      }
+
+      uusi = await Blog.
+        findOneAndUpdate( {_id: request.params.id} , blogi, {new:true} )
+      
+
+      if( uusi === null)
+        response.status(400).json({error: 'bad request'})
+      else
+        response.json(uusi)
+    } catch( exception ) {
+      console.log( esception )
+      response.status(400).send({ error: 'malformatted id'})
     }
-
-    uusi = await Blog.
-      findOneAndUpdate( {_id: request.params.id} , blogi, {new:true} )
-    
-
-    if( uusi === null)
-      response.status(400).json({error: 'bad request'})
-    else
-      response.json(uusi)
 
 
   })

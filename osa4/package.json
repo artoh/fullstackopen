@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Blogisovellus Full Stack Open ",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "bcrypt": "^3.0.1"
+  },
   "devDependencies": {
     "cross-env": "^5.2.0",
     "jest": "^23.6.0",
