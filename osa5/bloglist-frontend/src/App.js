@@ -11,18 +11,22 @@ class App extends React.Component {
       username: '',
       password: '',
       user: null,
-      error: null
+      error: null,
+      success: null,
+      newtitle: '',
+      newauthor: '',
+      newurl: ''
     }
   }
 
-  handleLoginFieldChange = (event) => {
+  handleFieldChange = (event) => {
     this.setState({ [event.target.name] : event.target.value})
   }
 
-  componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
+  componentDidMount = async () => {
+
+    const blogs = await blogService.getAll()
+    this.setState({blogs})
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if( loggedUserJSON) {
@@ -53,13 +57,34 @@ class App extends React.Component {
     this.setState( {user: null})
   }
 
+  addBlog = async (event) => {
+    event.preventDefault()
+    try {
+      const blogObject = {
+        title: this.state.newtitle,
+        author: this.state.newauthor,
+        url: this.state.newurl
+      }
+
+      await blogService.create(blogObject)
+
+      this.setState({newtitle:'',newauthor:'',newurl:''})
+      const blogs = await blogService.getAll()
+      console.log(blogs)
+      this.setState({ blogs })
+
+    } catch (exception) {
+      this.setState({ error: 'Something went wrong'})
+      setTimeout( () => { this.setState({error: null})}, 5000)
+    }
+  }
 
   render() {
     const loginForm = () => (
       <div><h2>Log into application</h2>
       <form onSubmit={this.login}>  
-       <div>username:<input type='text' name='username' value={this.state.username} onChange={this.handleLoginFieldChange}/></div>
-       <div>password:<input type='password' name='password' value={this.state.password} onChange={this.handleLoginFieldChange}/></div>
+       <div>username:<input type='text' name='username' value={this.state.username} onChange={this.handleFieldChange}/></div>
+       <div>password:<input type='password' name='password' value={this.state.password} onChange={this.handleFieldChange}/></div>
        <button type='submit'>login</button>
       </form>
       </div>
@@ -69,6 +94,14 @@ class App extends React.Component {
       <div>
         <h2>blogs</h2>
         <div>{this.state.user.name} logged in <button onClick={this.logout}>logout</button> </div>
+        <div><h3>create new</h3>
+         <form onSubmit={this.addBlog}>
+          <div>title<input type='text' name='newtitle' value={this.state.newtitle} onChange={this.handleFieldChange}/></div>
+          <div>author<input type='text' name='newauthor' value={this.state.newauthor} onChange={this.handleFieldChange}/></div>
+          <div>url<input type='text' name='newurl' value={this.state.newurl} onChange={this.handleFieldChange}/></div>
+          <button type='submit'>create</button>
+         </form>
+        </div>
         {this.state.blogs.map(blog => 
           <Blog key={blog._id} blog={blog}/>
         )}
