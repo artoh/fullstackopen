@@ -3,6 +3,18 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+const Notification = ({message, className}) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className={className}>
+      {message}
+    </div>
+  )
+}
+
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -68,11 +80,14 @@ class App extends React.Component {
 
       await blogService.create(blogObject)
 
+      this.setState({ success: `A new blog ${blogObject.title} by ${blogObject.author} added`})
+      setTimeout( () => { this.setState({success: null})}, 5000)      
+
       this.setState({newtitle:'',newauthor:'',newurl:''})
       const blogs = await blogService.getAll()
       console.log(blogs)
       this.setState({ blogs })
-
+      
     } catch (exception) {
       this.setState({ error: 'Something went wrong'})
       setTimeout( () => { this.setState({error: null})}, 5000)
@@ -81,7 +96,7 @@ class App extends React.Component {
 
   render() {
     const loginForm = () => (
-      <div><h2>Log into application</h2>
+      <div><Notification message={this.state.error} className='error'/><h2>Log into application</h2>
       <form onSubmit={this.login}>  
        <div>username:<input type='text' name='username' value={this.state.username} onChange={this.handleFieldChange}/></div>
        <div>password:<input type='password' name='password' value={this.state.password} onChange={this.handleFieldChange}/></div>
@@ -93,6 +108,8 @@ class App extends React.Component {
     const blogs = () => (
       <div>
         <h2>blogs</h2>
+        <Notification message={this.state.error} className='error'/>
+        <Notification message={this.state.success} className='success'/>
         <div>{this.state.user.name} logged in <button onClick={this.logout}>logout</button> </div>
         <div><h3>create new</h3>
          <form onSubmit={this.addBlog}>
