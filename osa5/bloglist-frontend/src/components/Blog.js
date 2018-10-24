@@ -1,5 +1,7 @@
 import React from 'react'
 
+import blogService from '../services/blogs'
+
 class Blog extends React.Component {
 
   constructor(props) {
@@ -8,11 +10,23 @@ class Blog extends React.Component {
       detailsVisible : false,
       blog: props.blog
     }
+    
   }
 
 
   toggleDetailsVisibility = () => {
     this.setState({detailsVisible: !this.state.detailsVisible})
+  }
+
+  addLike = async (event) => {
+    event.preventDefault()
+    try {
+      await blogService.like(this.state.blog)    
+      this.state.blog.likes++
+      this.setState( { blog : this.state.blog } )
+    } catch (exception) {
+      console.log("Can't like", exception)
+    }
   }
 
   render() {
@@ -29,11 +43,13 @@ class Blog extends React.Component {
     const lisannyt = this.state.blog.user ? "added by " + this.state.blog.user.name : ""
 
     return (      
-      <div onClick={this.toggleDetailsVisibility} style={blogStyle}>
-        {this.state.blog.title} {this.state.blog.author}
+      <div style={blogStyle}>
+        <div onClick={this.toggleDetailsVisibility}>
+          {this.state.blog.title} {this.state.blog.author}
+        </div>
         <div style={detailsStyle}>          
           <a href={this.state.blog.url}>{this.state.blog.url}</a><br/>
-          {this.state.blog.likes} likes <button>like</button><br/>
+          {this.state.blog.likes} likes <button onClick={this.addLike}>like</button><br/>
           {lisannyt}
         </div>
       </div>  

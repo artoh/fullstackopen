@@ -96,6 +96,7 @@ class App extends React.Component {
     }
   }
 
+
   render() {
     const loginForm = () => (
       <div><Notification message={this.state.error} className='error'/><h2>Log into application</h2>
@@ -128,7 +129,7 @@ class App extends React.Component {
           </Togglable>
         </div>
         {this.state.blogs.map(blog => 
-          <Blog key={blog.id} blog={blog}/>
+          <Blog key={blog.id} blog={blog} />
         )}
       </div>
     )
