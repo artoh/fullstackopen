@@ -1,5 +1,6 @@
 import React from 'react'
 import Blog from './components/Blog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -87,6 +88,7 @@ class App extends React.Component {
       const blogs = await blogService.getAll()
       console.log(blogs)
       this.setState({ blogs })
+      this.newForm.toggleVisibility()
       
     } catch (exception) {
       this.setState({ error: 'Something went wrong'})
@@ -110,17 +112,23 @@ class App extends React.Component {
         <h2>blogs</h2>
         <Notification message={this.state.error} className='error'/>
         <Notification message={this.state.success} className='success'/>
-        <div>{this.state.user.name} logged in <button onClick={this.logout}>logout</button> </div>
-        <div><h3>create new</h3>
-         <form onSubmit={this.addBlog}>
-          <div>title<input type='text' name='newtitle' value={this.state.newtitle} onChange={this.handleFieldChange}/></div>
-          <div>author<input type='text' name='newauthor' value={this.state.newauthor} onChange={this.handleFieldChange}/></div>
-          <div>url<input type='text' name='newurl' value={this.state.newurl} onChange={this.handleFieldChange}/></div>
-          <button type='submit'>create</button>
-         </form>
+        <div>
+          {this.state.user.name} logged in <button onClick={this.logout}>logout</button> 
+        </div>
+        <div>
+          <Togglable buttonLabel="new blog" ref={component => this.newForm = component}>
+            <div><h3>create new</h3>
+              <form onSubmit={this.addBlog}>
+                <div>title<input type='text' name='newtitle' value={this.state.newtitle} onChange={this.handleFieldChange}/></div>
+                <div>author<input type='text' name='newauthor' value={this.state.newauthor} onChange={this.handleFieldChange}/></div>
+                <div>url<input type='text' name='newurl' value={this.state.newurl} onChange={this.handleFieldChange}/></div>
+                <button type='submit'>create</button>
+              </form>
+            </div>
+          </Togglable>
         </div>
         {this.state.blogs.map(blog => 
-          <Blog key={blog._id} blog={blog}/>
+          <Blog key={blog.id} blog={blog}/>
         )}
       </div>
     )
