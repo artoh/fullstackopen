@@ -10,6 +10,7 @@ class Blog extends React.Component {
       detailsVisible : false,
       blog: props.blog
     }
+    this.sorter = props.sorter
     
   }
 
@@ -24,6 +25,7 @@ class Blog extends React.Component {
       await blogService.like(this.state.blog)    
       this.state.blog.likes++
       this.setState( { blog : this.state.blog } )
+      this.sorter()
     } catch (exception) {
       console.log("Can't like", exception)
     }

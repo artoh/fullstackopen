@@ -46,6 +46,7 @@ class App extends React.Component {
       const user = JSON.parse( loggedUserJSON )  
       this.setState({user})
       blogService.setToken(user.token)
+      this.sort()
     }
   } 
 
@@ -89,6 +90,7 @@ class App extends React.Component {
       console.log(blogs)
       this.setState({ blogs })
       this.newForm.toggleVisibility()
+      this.sort()
       
     } catch (exception) {
       this.setState({ error: 'Something went wrong'})
@@ -97,7 +99,18 @@ class App extends React.Component {
   }
 
 
+  sort = () => {
+    const compareLikes = (a,b) => {
+      return b.likes - a.likes
+    }
+
+    this.state.blogs.sort(compareLikes)  
+    this.setState({blog: this.state.blogs})
+  }
+
   render() {
+  
+
     const loginForm = () => (
       <div><Notification message={this.state.error} className='error'/><h2>Log into application</h2>
       <form onSubmit={this.login}>  
@@ -128,9 +141,11 @@ class App extends React.Component {
             </div>
           </Togglable>
         </div>
-        {this.state.blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} />
-        )}
+        <div id="Blogs">
+          {this.state.blogs.map(blog => 
+            <Blog key={blog.id} blog={blog} sorter={this.sort}/>
+          )}
+          </div>
       </div>
     )
     
