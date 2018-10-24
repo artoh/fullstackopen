@@ -11,6 +11,9 @@ class Blog extends React.Component {
       blog: props.blog
     }
     this.sorter = props.sorter
+    this.canDelete = (!props.blog.user)  || props.blog.user.username === props.user ? true : false
+
+    console.log( props.user)
     
   }
 
@@ -51,7 +54,9 @@ class Blog extends React.Component {
         </div>
         <div style={detailsStyle}>          
           <a href={this.state.blog.url}>{this.state.blog.url}</a><br/>
-          {this.state.blog.likes} likes <button onClick={this.addLike}>like</button><br/>
+          {this.state.blog.likes} likes <button onClick={this.addLike}>like</button>
+          {this.canDelete && <button>delete</button>}
+          <br/>
           {lisannyt}
         </div>
       </div>  
