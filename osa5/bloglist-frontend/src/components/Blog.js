@@ -10,10 +10,9 @@ class Blog extends React.Component {
       detailsVisible : false,
       blog: props.blog
     }
-    this.sorter = props.sorter
+    this.refresher = props.refresher
     this.canDelete = (!props.blog.user)  || props.blog.user.username === props.user ? true : false
 
-    console.log( props.user)
     
   }
 
@@ -28,10 +27,23 @@ class Blog extends React.Component {
       await blogService.like(this.state.blog)    
       this.state.blog.likes++
       this.setState( { blog : this.state.blog } )
-      this.sorter()
+      await this.refresher()
     } catch (exception) {
       console.log("Can't like", exception)
     }
+  }
+
+  deleteThis = async (event) => {
+    if( !window.confirm("delete '" + this.state.blog.title + "' by " + this.state.blog.author))
+      return;
+
+    try {
+      await blogService.deleteBlog(this.state.blog.id)
+      await this.refresher()
+    } catch (exception) {
+      console.log("Can't delete ", exception)
+    }
+    
   }
 
   render() {
@@ -55,7 +67,7 @@ class Blog extends React.Component {
         <div style={detailsStyle}>          
           <a href={this.state.blog.url}>{this.state.blog.url}</a><br/>
           {this.state.blog.likes} likes <button onClick={this.addLike}>like</button>
-          {this.canDelete && <button>delete</button>}
+          {this.canDelete && <button onClick={this.deleteThis}>delete</button>}
           <br/>
           {lisannyt}
         </div>

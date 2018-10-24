@@ -5,10 +5,11 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const blogsRouter = require('./controllers/blogs')
+const tokenExtractor = require('./controllers/tokenExtractor')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
-const tokenExtractor = require('./controllers/tokenExtractor')
+const blogsRouter = require('./controllers/blogs')
+
 
 const config = require('./utils/config')
 

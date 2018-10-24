@@ -21,6 +21,14 @@ const setToken = (newToken) => {
 	token = `bearer ${newToken}`
 }
 
+const deleteBlog = async (id) => {
+  const config = {
+    headers: { 'Authorization' : token }
+  }  
+  const response = await axios.delete(baseUrl + id,config)
+  return response
+}
+
 const like = async (blog) => {
   const uusi = {
     likes: blog.likes + 1,
@@ -37,4 +45,4 @@ const like = async (blog) => {
 
 }
 
-export default { getAll, setToken, create, like}
+export default { getAll, setToken, create, like, deleteBlog}

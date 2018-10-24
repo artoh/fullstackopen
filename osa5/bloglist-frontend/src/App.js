@@ -86,16 +86,21 @@ class App extends React.Component {
       setTimeout( () => { this.setState({success: null})}, 5000)      
 
       this.setState({newtitle:'',newauthor:'',newurl:''})
-      const blogs = await blogService.getAll()
-      console.log(blogs)
-      this.setState({ blogs })
+      this.refresh()
+
       this.newForm.toggleVisibility()
-      this.sort()
       
     } catch (exception) {
       this.setState({ error: 'Something went wrong'})
       setTimeout( () => { this.setState({error: null})}, 5000)
     }
+  }
+
+  refresh = async () => {
+    const blogs = await blogService.getAll()    
+    this.setState({ blogs: blogs })
+    this.sort()
+    console.log("haettu", blogs)
   }
 
 
@@ -143,7 +148,7 @@ class App extends React.Component {
         </div>
         <div id="Blogs">
           {this.state.blogs.map(blog => 
-            <Blog key={blog.id} blog={blog} sorter={this.sort} user={this.state.user.username}/>
+            <Blog key={blog.id} blog={blog} refresher={this.refresh} user={this.state.user.username}/>
           )}
           </div>
       </div>

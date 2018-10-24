@@ -4,6 +4,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
+  console.log( request.user);	
   const blogs = await Blog
     .find({})
     .populate('user',{username:1, name:1})
@@ -12,7 +13,6 @@ blogsRouter.get('/', async (request, response) => {
 })
   
 blogsRouter.post('/', async (request, response) => {
-
   try {
     const uusi = request.body
 
@@ -46,14 +46,16 @@ blogsRouter.post('/', async (request, response) => {
       console.log( poikkeus )
       response.status(400).send({error: 'malformatted id'})
     }
-  })
+})
 
-  blogsRouter.delete('/:id', async (request, response) => {    
+blogsRouter.delete('/:id', async (request, response) => {    
     try {
       const blog = await Blog.findOne({_id: request.params.id})    
+	  
+	  
       if( !blog)  {
         response.status(404).end()      
-      } else if( blog.user && blog.user.toString() === request.user ) {
+      } else if( !blog.user || blog.user.toString() === request.user ) {
         await Blog.findOneAndDelete({_id: request.params.id})
         response.status(204).end()
       } else {
@@ -64,11 +66,10 @@ blogsRouter.post('/', async (request, response) => {
         console.log(poikkeus)
         response.status(500).json({error: 'Something went wrong...'})
     }
-  })
+})
 
 
-  blogsRouter.put('/:id', async (request, response) => {
-   
+blogsRouter.put('/:id', async (request, response) => { 
     try {
 
       const blog = await Blog.findOne({_id: request.params.id})    
@@ -103,6 +104,6 @@ blogsRouter.post('/', async (request, response) => {
     }
 
 
-  })
+})
 
   module.exports = blogsRouter
