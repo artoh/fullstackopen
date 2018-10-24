@@ -2,6 +2,8 @@ import React from 'react'
 
 import blogService from '../services/blogs'
 
+import PropTypes from 'prop-types'
+
 class Blog extends React.Component {
 
   constructor(props) {
@@ -74,6 +76,11 @@ class Blog extends React.Component {
       </div>  
     )
   }
+}
+
+Blog.propTypes = {
+  refresher : PropTypes.func.isRequired
+  // tatapropsiieioo : PropTypes.bool.isRequired
 }
 
 export default Blog
