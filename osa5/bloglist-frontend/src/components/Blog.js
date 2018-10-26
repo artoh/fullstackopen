@@ -63,10 +63,10 @@ class Blog extends React.Component {
 
     return (      
       <div style={blogStyle}>
-        <div onClick={this.toggleDetailsVisibility}>
+        <div onClick={this.toggleDetailsVisibility} className="title">
           {this.state.blog.title} {this.state.blog.author}
         </div>
-        <div style={detailsStyle}>          
+        <div style={detailsStyle} className="details">            
           <a href={this.state.blog.url}>{this.state.blog.url}</a><br/>
           {this.state.blog.likes} likes <button onClick={this.addLike}>like</button>
           {this.canDelete && <button onClick={this.deleteThis}>delete</button>}
@@ -79,7 +79,7 @@ class Blog extends React.Component {
 }
 
 Blog.propTypes = {
-  refresher : PropTypes.func.isRequired
+  blog : PropTypes.object.isRequired
   // tatapropsiieioo : PropTypes.bool.isRequired
 }
 
