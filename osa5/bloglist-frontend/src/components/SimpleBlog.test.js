@@ -10,12 +10,21 @@ describe.only('<SimpleBlog />', () => {
             likes: 3
         }
 
-        const blogComponent = shallow(<SimpleBlog blog={blogi} />)
+        const mockHandler = jest.fn()
+
+        const blogComponent = shallow(<SimpleBlog blog={blogi} onClick={mockHandler}/>)        
+
         const titleDiv = blogComponent.find('.blogtitle')
-        const contentDiv = blogComponent.find('.content')
+        const contentDiv = blogComponent.find('.content')        
+
+        const button = blogComponent.find('button')
+        button.simulate('click')
+        button.simulate('click')
 
         expect( titleDiv.text() ).toContain( blogi.author )
         expect( titleDiv.text() ).toContain( blogi.title )
         expect( contentDiv.text() ).toContain( blogi.likes )
+
+        expect( mockHandler.mock.calls.length).toBe(2)
     } )    
 })
