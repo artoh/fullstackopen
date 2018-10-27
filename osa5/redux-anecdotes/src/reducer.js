@@ -34,6 +34,9 @@ const reducer = (state = initialState, action) => {
     newList.sort(function(a,b) { return b.votes - a.votes})     
     return newList
 
+  case 'NEW' :
+    return [...state, action.data]
+
   default:
     return state    
   }
