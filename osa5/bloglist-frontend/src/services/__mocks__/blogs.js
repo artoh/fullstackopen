@@ -18,4 +18,8 @@ const getAll = () => {
     return Promise.resolve(blogs)
 }
 
-export default { getAll, blogs}
+const setToken = (newToken) => {
+    token = newToken
+}
+
+export default { getAll, blogs, setToken}
