@@ -23,7 +23,7 @@ class AnecdoteList extends React.Component {
         return (
             <div>
                 <h2>Anecdotes</h2>
-                <Filter store={this.props.store}/>
+                <Filter />
                 {filtered.sort((a, b) => b.votes - a.votes).map(anecdote =>
                     <div key={anecdote.id}>
                         <div>
