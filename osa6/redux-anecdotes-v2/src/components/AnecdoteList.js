@@ -16,16 +16,12 @@ class AnecdoteList extends React.Component {
         setTimeout( () => this.props.clear(), 5000 )                      
     }
 
-    render() {
-        const { anecdotes, filter } = this.props        
-        const filtered = filter.length > 0 ? anecdotes.filter( anecdote => anecdote.content.toLowerCase().indexOf(
-            filter.toLowerCase()) > -1 ) : anecdotes
-        
+    render() {        
         return (
             <div>
                 <h2>Anecdotes</h2>
                 <Filter />
-                {filtered.sort((a, b) => b.votes - a.votes).map(anecdote =>
+                {this.props.visibleAnecdotes.map(anecdote =>
                     <div key={anecdote.id}>
                         <div>
                             {anecdote.content}
@@ -43,11 +39,16 @@ class AnecdoteList extends React.Component {
     }
 }
 
+const anecdotesToShow = (anecdotes, filter) => {
+    return anecdotes.filter( anecdote => anecdote.content.toLowerCase().indexOf(
+        filter.toLowerCase()) > -1 ).sort((a, b) => b.votes - a.votes)
+}
+
+
 const mapStateToProps = (state) => {
     return {
-        anecdotes: state.anecdotes,
-        filter: state.filter
+        visibleAnecdotes : anecdotesToShow( state.anecdotes, state.filter )
     }
 }
 
-export default connect( mapStateToProps, {anecdoteVote, notify, clear})(AnecdoteList)
+export default connect( mapStateToProps, { anecdoteVote, notify, clear })(AnecdoteList)
