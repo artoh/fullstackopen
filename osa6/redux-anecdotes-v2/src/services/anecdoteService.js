@@ -8,12 +8,13 @@ const getAll = async() => {
 }
 
 const createNew = async(content) => {
-    const response = await axios.post( url, {content, id: Math.floor(Math.random() * 99999)})
+    const response = await axios.post( url, {content, id: Math.floor(Math.random() * 99999), votes: 0})
     return response.data
 }
 
 const patchVote = async(anecdote) => {
-    const response = await axios.patch(url + anecdote.id, { votes: anecdote.votes})
+    const response = await axios.patch(url + anecdote.id, { votes: anecdote.votes + 1})
+    console.log( anecdote, response.data)
     return response.data
 }
 

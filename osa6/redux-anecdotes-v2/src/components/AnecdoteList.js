@@ -6,13 +6,19 @@ import { connect } from 'react-redux'
 import { anecdoteVote } from './../reducers/anecdoteReducer'
 import { notify, clear } from '../reducers/notificationReducer'
 
+import anecdoteService from './../services/anecdoteService'
+
 class AnecdoteList extends React.Component {
 
-    voter = (anecdote) => () => {
+    voter = (anecdote) => async () => {
         console.log('vote ' + anecdote.content)
+
 
         this.props.anecdoteVote(anecdote)
         this.props.notify('you voted ' + anecdote.content )
+
+        await anecdoteService.patchVote(anecdote)
+
         setTimeout( () => this.props.clear(), 5000 )                      
     }
 
@@ -40,6 +46,7 @@ class AnecdoteList extends React.Component {
 }
 
 const anecdotesToShow = (anecdotes, filter) => {    
+    console.log( anecdotes )
     return  anecdotes.filter( anecdote => anecdote.content.toLowerCase().indexOf(
         filter.toLowerCase()) > -1 ).sort((a, b) => b.votes - a.votes) 
 }
