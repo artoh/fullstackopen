@@ -16,7 +16,7 @@ class AnecdoteList extends React.Component {
         setTimeout( () => this.props.clear(), 5000 )                      
     }
 
-    render() {        
+    render() {             
         return (
             <div>
                 <h2>Anecdotes</h2>
@@ -39,9 +39,9 @@ class AnecdoteList extends React.Component {
     }
 }
 
-const anecdotesToShow = (anecdotes, filter) => {
-    return anecdotes.filter( anecdote => anecdote.content.toLowerCase().indexOf(
-        filter.toLowerCase()) > -1 ).sort((a, b) => b.votes - a.votes)
+const anecdotesToShow = (anecdotes, filter) => {    
+    return  anecdotes.filter( anecdote => anecdote.content.toLowerCase().indexOf(
+        filter.toLowerCase()) > -1 ).sort((a, b) => b.votes - a.votes) 
 }
 
 
