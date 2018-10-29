@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom'
 
 const Anecdote = ({anecdote}) => {
   return (
@@ -49,13 +49,20 @@ const Footer = () => (
   </div>
 )
 
+const Notification = ({text}) => (
+  <div>
+    {text} 
+  </div>
+)
+
 class CreateNew extends React.Component {
   constructor() {
     super()
     this.state = {
       content: '',
       author: '',
-      info: ''
+      info: '',
+      redirect : false
     }
   }
 
@@ -72,30 +79,38 @@ class CreateNew extends React.Component {
       info: this.state.info,
       votes: 0
     })
+    this.setState({redirect: true})
+    
   }
 
   render() {
-    return(
-      <div>
-        <h2>create a new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            content 
-            <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
-            <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
-            <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div> 
-          <button>create</button>
-        </form>
-      </div>  
-    )
+    if( this.state.redirect) {
+      return (<Redirect to='/'/>)
+    } else {
 
+      return(
+        <div>
+          <h2>create a new anecdote</h2>
+          <form onSubmit={this.handleSubmit}>
+            <div>
+              content 
+              <input name='content' value={this.state.content} onChange={this.handleChange} />
+            </div>
+            <div>
+              author
+              <input name='author' value={this.state.author} onChange={this.handleChange} />
+            </div>
+            <div>
+              url for more info
+              <input name='info' value={this.state.info} onChange={this.handleChange} />
+            </div> 
+            <button>create</button>
+          </form>
+
+        </div>  
+      )
+
+    }
   }
 }
 
@@ -126,7 +141,8 @@ class App extends React.Component {
 
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
+    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote), notification: `a new notification ${anecdote.content} created` })
+    setTimeout( () => this.setState({notification:''}), 10000)
   }
 
   anecdoteById = (id) =>
@@ -152,6 +168,7 @@ class App extends React.Component {
           <div>
             <h1>Software anecdotes</h1>
               <Menu />
+              <Notification text={ this.state.notification } />
               <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
               <Route path="/about" render={() => <About />} />
               <Route path="/create" render={() => <CreateNew addNew={this.addNew} /> } />     
