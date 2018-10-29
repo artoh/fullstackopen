@@ -1,4 +1,6 @@
 
+import anecdoteService from './../services/anecdoteService'
+
 const anecdoteReducer = (store = [], action) => {
     if (action.type==='VOTE') {
         const old = store.filter(a => a.id !==action.id)
@@ -31,11 +33,36 @@ export const anecdoteVote = (anecdote) => {
     }
 }
 
-export const anecdoteInitialization = (data) => {
-    return {
-        type: 'INIT',
-        data
+export const createAnecdote = (content) => {
+    return async (dispatch) => {
+        const newAnecdote = await anecdoteService.createNew(content)
+        dispatch({
+            type: 'CREATE',
+            data: newAnecdote
+        })
     }
+}
+
+export const voteAnecdote = (anecdote) => {
+    return async (dispatch) => {
+        await anecdoteService.patchVote(anecdote)
+        dispatch({
+            type: 'VOTE',
+            id: anecdote.id
+        })
+    }
+}
+
+
+export const initAnecdotes = () => {
+    return async (dispatch) => {
+        const anecdotes = await anecdoteService.getAll()
+        dispatch({
+            type: 'INIT',
+            data: anecdotes
+        })
+    }
+
 }
 
 export default anecdoteReducer

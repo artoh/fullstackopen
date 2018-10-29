@@ -11,12 +11,17 @@ const notificationReducer = (store = reducerAtStart, action) => {
     }
 }
 
-export const notify = (text) => {
-    return {
-        type: 'NOTIFY',
-        data: text
+
+export const notify = (text, seconds) => {
+    return async (dispatch) => {
+        setTimeout( () =>  dispatch({ type: 'CLEAR'}) , seconds * 1000)
+        dispatch({
+            type: 'NOTIFY',
+            data: text
+        })
     }
 }
+
 
 
 export const clear = () => {
