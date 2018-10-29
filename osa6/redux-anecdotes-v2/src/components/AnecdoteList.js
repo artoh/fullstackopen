@@ -13,12 +13,8 @@ class AnecdoteList extends React.Component {
         console.log('vote ' + anecdote.content)
 
         await this.props.voteAnecdote(anecdote)
-        // this.props.anecdoteVote(anecdote)
         this.props.notify('you voted ' + anecdote.content , 5)
-
-        // await anecdoteService.patchVote(anecdote)
-
-        // setTimeout( () => this.props.clear(), 5000 )                      
+                    
     }
 
     render() {             
