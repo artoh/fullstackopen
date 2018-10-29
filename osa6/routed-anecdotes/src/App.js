@@ -49,8 +49,22 @@ const Footer = () => (
   </div>
 )
 
+const notificationStyle = {
+  border: "2px solid lightGreen",
+  borderRadius: "5px",
+  padding: "8px 8px 8px 8px",
+  width: "auto",
+  color: "green",
+  topMargin: 15,
+  bottomMargin: 15
+}
+
+const hideStyle = {
+  display: 'none'
+}
+
 const Notification = ({text}) => (
-  <div>
+  <div style={text.length > 0 ? notificationStyle : hideStyle}>
     {text} 
   </div>
 )
@@ -141,7 +155,7 @@ class App extends React.Component {
 
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote), notification: `a new notification ${anecdote.content} created` })
+    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote), notification: `a new notification '${anecdote.content}' created` })
     setTimeout( () => this.setState({notification:''}), 10000)
   }
 
