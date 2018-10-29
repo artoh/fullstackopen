@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom'
 
 const Anecdote = ({anecdote}) => {
   return (
@@ -10,11 +10,30 @@ const Anecdote = ({anecdote}) => {
   )
 }
 
+const menustyle = {
+  backgroundColor : 'darkCyan',
+  padding: '10px 10px 10px 10px',
+  textDecoration: 'none'
+}
+
+const itemstyle = {
+  textDecoration: 'none',
+  padding: '10px 10px 10px 10px',
+  color: 'black'
+}
+
+const activestyle = {
+  backgroundColor: 'green',
+  padding: '14px 14px 14px 14px',
+  textDecoration: 'none',
+  color: 'white'
+}
+
 const Menu = () => (
-  <div>    
-    <Link to="/">anecdotes</Link>&nbsp;
-    <Link to="/create">create new</Link>&nbsp;
-    <Link to="/about">about</Link>
+  <div style={menustyle}>    
+    <NavLink exact style={itemstyle} activeStyle={activestyle} to="/" >anecdotes</NavLink>&nbsp;
+    <NavLink activeStyle={activestyle} style={itemstyle}  to="/create" >create new</NavLink>&nbsp;
+    <NavLink activeStyle={activestyle} style={itemstyle}  to="/about" >about</NavLink>
   </div>
 )
 
