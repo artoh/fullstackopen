@@ -4,7 +4,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-const Notification = ({message, className}) => {
+const Notification = ({ message, className }) => {
   if (message === null) {
     return null
   }
@@ -33,22 +33,22 @@ class App extends React.Component {
   }
 
   handleFieldChange = (event) => {
-    this.setState({ [event.target.name] : event.target.value})
+    this.setState({ [event.target.name] : event.target.value })
   }
 
   componentDidMount = async () => {
 
     const blogs = await blogService.getAll()
-    this.setState({blogs})
+    this.setState({ blogs })
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if( loggedUserJSON) {
-      const user = JSON.parse( loggedUserJSON )  
-      this.setState({user})
+      const user = JSON.parse( loggedUserJSON )
+      this.setState({ user })
       blogService.setToken(user.token)
       this.sort()
     }
-  } 
+  }
 
   login = async (event) => {
     event.preventDefault()
@@ -59,16 +59,16 @@ class App extends React.Component {
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      this.setState({ username : '', password:'', user})    
+      this.setState({ username : '', password:'', user })
     } catch (exception) {
-      this.setState({ error: 'Invalid username or password'})
-      setTimeout( () => { this.setState({error: null})}, 5000)
+      this.setState({ error: 'Invalid username or password' })
+      setTimeout( () => { this.setState({ error: null })}, 5000)
     }
   }
 
   logout = (event) => {
     window.localStorage.removeItem('loggedBlogappUser')
-    this.setState( {user: null})
+    this.setState( { user: null })
   }
 
   addBlog = async (event) => {
@@ -82,25 +82,25 @@ class App extends React.Component {
 
       await blogService.create(blogObject)
 
-      this.setState({ success: `A new blog ${blogObject.title} by ${blogObject.author} added`})
-      setTimeout( () => { this.setState({success: null})}, 5000)      
+      this.setState({ success: `A new blog ${blogObject.title} by ${blogObject.author} added` })
+      setTimeout( () => { this.setState({ success: null })}, 5000)
 
-      this.setState({newtitle:'',newauthor:'',newurl:''})
+      this.setState({ newtitle:'',newauthor:'',newurl:'' })
       this.refresh()
 
       this.newForm.toggleVisibility()
-      
+
     } catch (exception) {
-      this.setState({ error: 'Something went wrong'})
-      setTimeout( () => { this.setState({error: null})}, 5000)
+      this.setState({ error: 'Something went wrong' })
+      setTimeout( () => { this.setState({ error: null })}, 5000)
     }
   }
 
   refresh = async () => {
-    const blogs = await blogService.getAll()    
+    const blogs = await blogService.getAll()
     this.setState({ blogs: blogs })
     this.sort()
-    console.log("haettu", blogs)
+    console.log('haettu', blogs)
   }
 
 
@@ -109,20 +109,20 @@ class App extends React.Component {
       return b.likes - a.likes
     }
 
-    this.state.blogs.sort(compareLikes)  
-    this.setState({blog: this.state.blogs})
+    this.state.blogs.sort(compareLikes)
+    this.setState({ blog: this.state.blogs })
   }
 
   render() {
-  
+
 
     const loginForm = () => (
       <div><Notification message={this.state.error} className='error'/><h2>Log into application</h2>
-      <form onSubmit={this.login}>  
-       <div>username:<input type='text' name='username' value={this.state.username} onChange={this.handleFieldChange}/></div>
-       <div>password:<input type='password' name='password' value={this.state.password} onChange={this.handleFieldChange}/></div>
-       <button type='submit'>login</button>
-      </form>
+        <form onSubmit={this.login}>
+          <div>username:<input type='text' name='username' value={this.state.username} onChange={this.handleFieldChange}/></div>
+          <div>password:<input type='password' name='password' value={this.state.password} onChange={this.handleFieldChange}/></div>
+          <button type='submit'>login</button>
+        </form>
       </div>
     )
 
@@ -132,7 +132,7 @@ class App extends React.Component {
         <Notification message={this.state.error} className='error'/>
         <Notification message={this.state.success} className='success'/>
         <div>
-          {this.state.user.name} logged in <button onClick={this.logout}>logout</button> 
+          {this.state.user.name} logged in <button onClick={this.logout}>logout</button>
         </div>
         <div>
           <Togglable buttonLabel="new blog" ref={component => this.newForm = component}>
@@ -147,20 +147,20 @@ class App extends React.Component {
           </Togglable>
         </div>
         <div id="Blogs">
-          {this.state.blogs.map(blog => 
+          {this.state.blogs.map(blog =>
             <Blog key={blog.id} blog={blog} refresher={this.refresh} user={this.state.user.username}/>
           )}
-          </div>
+        </div>
       </div>
     )
-    
+
     if (this.state.user === null) {
       return loginForm()
     } else {
       return blogs()
-    }    
-    
+    }
+
   }
 }
 
-export default App;
+export default App

@@ -18,13 +18,13 @@ const create = async (newObject) => {
 }
 
 const setToken = (newToken) => {
-	token = `bearer ${newToken}`
+  token = `bearer ${newToken}`
 }
 
 const deleteBlog = async (id) => {
   const config = {
     headers: { 'Authorization' : token }
-  }  
+  }
   const response = await axios.delete(baseUrl + id,config)
   return response
 }
@@ -39,10 +39,10 @@ const like = async (blog) => {
   if(blog.user) {
     uusi.user = blog.user._id
   }
-  
+
   const putResponse = await axios.put(baseUrl + blog.id, uusi)
   return putResponse
 
 }
 
-export default { getAll, setToken, create, like, deleteBlog}
+export default { getAll, setToken, create, like, deleteBlog }
