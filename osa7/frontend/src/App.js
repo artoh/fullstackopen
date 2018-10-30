@@ -4,6 +4,8 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { Container } from 'semantic-ui-react'
+
 const Notification = ({ message, className }) => {
   if (message === null) {
     return null
@@ -117,17 +119,17 @@ class App extends React.Component {
 
 
     const loginForm = () => (
-      <div><Notification message={this.state.error} className='error'/><h2>Log into application</h2>
+      <Container><Notification message={this.state.error} className='error'/><h2>Log into application</h2>
         <form onSubmit={this.login}>
           <div>username:<input type='text' name='username' value={this.state.username} onChange={this.handleFieldChange}/></div>
           <div>password:<input type='password' name='password' value={this.state.password} onChange={this.handleFieldChange}/></div>
           <button type='submit'>login</button>
         </form>
-      </div>
+      </Container>
     )
 
     const blogs = () => (
-      <div>
+      <Container>
         <h2>blogs</h2>
         <Notification message={this.state.error} className='error'/>
         <Notification message={this.state.success} className='success'/>
@@ -151,14 +153,16 @@ class App extends React.Component {
             <Blog key={blog.id} blog={blog} refresher={this.refresh} user={this.state.user.username}/>
           )}
         </div>
-      </div>
+      </Container>
     )
+    
 
     if (this.state.user === null) {
       return loginForm()
     } else {
       return blogs()
     }
+
 
   }
 }
