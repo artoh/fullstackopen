@@ -1,6 +1,6 @@
 import React from 'react'
 
-import blogService from '../services/blogs'
+import blogService from '../services/blogService'
 
 import PropTypes from 'prop-types'
 
