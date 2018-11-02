@@ -8,8 +8,8 @@ import CreateModal from './components/CreateModal'
 import UserTable from './components/UserTable'
 import User from './components/User'
 
-import { Container } from 'semantic-ui-react'
-import { BrowserRouter as Router, Route, NavLink, Redirect} from 'react-router-dom'
+import { Container, Divider } from 'semantic-ui-react'
+import { BrowserRouter as Router, Route} from 'react-router-dom'
 
 
 import { connect } from 'react-redux';
@@ -40,6 +40,9 @@ class App extends React.Component {
             <Route path='/blogs/:id' render={ ({ match }) => <Blog id={match.params.id} /> } />
             <Route path='/users' exact render={ () => this.props.loggedUser && <UserTable />} />
             <Route path='/users/:id' render={ ({match}) => <User id={match.params.id} />} />
+            <Divider />
+            <p>Full Stack Open <br/>
+              <a href='https://github.com/artoh/fullstackopen'>My repository</a> </p>
           </div>
         </Router>
       </Container>

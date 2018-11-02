@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { Menu, Button } from 'semantic-ui-react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { logout } from './../reducers/loginReducer'
 
 class NavBar extends React.Component {
