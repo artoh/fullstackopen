@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { List } from 'semantic-ui-react'
+import { List, Loader } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 
 class User extends React.Component {
@@ -26,6 +26,10 @@ class User extends React.Component {
         <Redirect to={`/blogs/${this.state.redirect}`} />        
       )
     }
+    
+    if( !user) {
+      return ( <Loader active inline />)
+    }    
 
     return (
       <div>
