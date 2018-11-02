@@ -31,7 +31,7 @@ const deleteBlog = async (id) => {
 
 const like = async (blog) => {
   const uusi = {
-    likes: blog.likes + 1,
+    likes: blog.likes,
     author: blog.author,
     title: blog.title,
     url: blog.title

@@ -25,4 +25,4 @@ const mapStateToProps = (state) => {
 }
 
 
-export default connect(mapStateToProps, {notify})(Notification)
+export default connect(mapStateToProps, { notify })(Notification)
