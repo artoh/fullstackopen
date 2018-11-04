@@ -17,6 +17,11 @@ const create = async (newObject) => {
   return response.data
 }
 
+const comment = async (id, comment) => {
+  const response = await axios.post( baseUrl + id + '/comments', { comment: comment })
+  return response.data
+}
+
 const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
@@ -45,4 +50,4 @@ const like = async (blog) => {
 
 }
 
-export default { getAll, setToken, create, like, deleteBlog }
+export default { getAll, setToken, create, like, deleteBlog, comment }

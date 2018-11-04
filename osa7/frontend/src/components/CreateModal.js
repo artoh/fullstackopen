@@ -33,7 +33,7 @@ class CreateModal extends React.Component {
 
     return (
       <Modal 
-        trigger={<Button>Create blog</Button>}
+        trigger={<Button style={{ float: 'right', marginBottom: 20 }}>Create blog</Button>}
         centered={false} 
         open={this.state.open}       
         onOpen={this.onOpen}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Loader, Button } from 'semantic-ui-react'
-import { like, deleteBlog } from './../reducers/blogReducer'
+import { Loader, Button, Input } from 'semantic-ui-react'
+import { like, deleteBlog, commentBlog } from './../reducers/blogReducer'
 import { notify } from './../reducers/notificationReducer'
 
 class Blog extends React.Component {
@@ -10,7 +10,8 @@ class Blog extends React.Component {
     super(props)
     console.log(props)
     this.state = {
-      id: props.id
+      id: props.id,
+      newComment: ''
     }
 
 
@@ -31,6 +32,18 @@ class Blog extends React.Component {
     window.location.replace('/')    
   }
 
+  addComment = () => {
+    console.log(this.state.newComment)
+    try {
+      this.props.commentBlog( this.state.id, this.state.newComment)
+      this.props.notify( 'Comment \'' + this.state.newComment + '\' added','success')
+    } catch (exception) {
+      console.log( exception )
+    }
+
+    this.setState({ newComment:'' })
+  }
+
   render() {
    
     const blog = this.props.blogs.find( blog => blog.id === this.state.id)
@@ -49,7 +62,21 @@ class Blog extends React.Component {
           {(!blog.user || blog.user.username === this.props.user.username) && <Button onClick={this.deleteBlog}>Delete</Button>}
           <br/>
           {blog.user && <span><span>added by </span>{blog.user.name}</span>}
+          <h3>Comments</h3>
+          <ul>
+            {blog.comments.map(comment => <li key={Math.floor(Math.random()*99999)}> {comment} </li>)}
+          </ul>
           
+          <Input 
+            type='text' 
+            name='comment' 
+            style={{width: '100%'}}
+            placeholder='Write your comment here'    
+            onChange={ e => this.setState({ newComment : e.target.value }) }
+            value={this.state.newComment}
+            action={{ content:'Add comment', onClick:this.addComment }}>              
+          </Input>
+        
         </div>
       </div>
     )
@@ -64,4 +91,4 @@ const mapStateToProps = (state) => {
 }
 
 
-export default connect(mapStateToProps, { like, deleteBlog, notify })(Blog)
+export default connect(mapStateToProps, { like, deleteBlog, commentBlog, notify })(Blog)

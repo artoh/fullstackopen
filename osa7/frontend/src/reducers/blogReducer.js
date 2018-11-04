@@ -58,4 +58,15 @@ export const createBlog = (blog) => {
   }
 }
 
+export const commentBlog = (id, comment) => {
+  return async (dispatch) => {
+    const blog = await blogService.comment(id, comment)
+    console.log(blog)
+    dispatch({
+      type: 'PUT',
+      data: blog
+    })
+  }
+}
+
 export default blogReducer
