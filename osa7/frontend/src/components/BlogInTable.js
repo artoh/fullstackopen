@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Table } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 class BlogInTable extends React.Component {
 
@@ -15,7 +16,7 @@ class BlogInTable extends React.Component {
 
   details = (event) => {
     event.preventDefault()
-    this.setState({details: true})
+    this.setState({ details: true })
   }
 
   render() {
@@ -27,7 +28,7 @@ class BlogInTable extends React.Component {
     }
 
     return (
-      <Table.Row onClick={this.details}>       
+      <Table.Row onClick={this.details}>
         <Table.Cell>
           {this.state.blog.author}
         </Table.Cell>
@@ -36,10 +37,14 @@ class BlogInTable extends React.Component {
         </Table.Cell>
         <Table.Cell>
           {this.state.blog.likes}
-        </Table.Cell>        
+        </Table.Cell>
       </Table.Row>
     )
   }
+}
+
+BlogInTable.propTypes = {
+  blog: PropTypes.object
 }
 
 export default BlogInTable

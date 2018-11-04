@@ -10,7 +10,7 @@ class CreateModal extends React.Component {
   onOpen = () => this.setState({ open: true })
   onClose = () => this.setState({ open: false })
 
-  create = async (e) => {    
+  create = async (e) => {
     e.preventDefault()
     this.onClose()
     try {
@@ -32,10 +32,10 @@ class CreateModal extends React.Component {
   render() {
 
     return (
-      <Modal 
+      <Modal
         trigger={<Button style={{ float: 'right', marginBottom: 20 }}>Create blog</Button>}
-        centered={false} 
-        open={this.state.open}       
+        centered={false}
+        open={this.state.open}
         onOpen={this.onOpen}
         onClose={this.onClose}
       >

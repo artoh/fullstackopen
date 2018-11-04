@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { List, Loader } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 class User extends React.Component {
   constructor( props ) {
@@ -23,33 +24,38 @@ class User extends React.Component {
 
     if( this.state.redirect ) {
       return (
-        <Redirect to={`/blogs/${this.state.redirect}`} />        
+        <Redirect to={`/blogs/${this.state.redirect}`} />
       )
     }
-    
+
     if( !user) {
       return ( <Loader active inline />)
-    }    
+    }
 
     return (
       <div>
-        <h2>{user.name}</h2>        
+        <h2>{user.name}</h2>
         <h3>Added blogs</h3>
         <List bulleted>
           {user.blogs.map( blog =>
             <List.Item key={blog._id} onClick={this.redirect(blog._id)}>
               {blog.title} by {blog.author}
-            </List.Item>  
+            </List.Item>
           )}
-        </List> 
+        </List>
       </div>
-        
-      
+
+
     )
 
   }
 
 }
+
+User.propTypes = {
+  id: PropTypes.number
+}
+
 
 const mapStateToProps = (state) => {
   return {

@@ -30,7 +30,7 @@ export const initBlogs = () => {
 export const like = (blog) => {
   return async (dispatch) => {
     blog.likes = blog.likes + 1
-    await blogService.like(blog)    
+    await blogService.like(blog)
     dispatch({
       type: 'PUT',
       data: blog

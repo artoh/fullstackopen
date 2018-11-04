@@ -7,9 +7,9 @@ import { Redirect } from 'react-router-dom'
 class UserTable extends React.Component {
   state = { redirect: false }
 
-  redirect = (id) => { 
+  redirect = (id) => {
     return () => {
-      this.setState({ redirect: id }) 
+      this.setState({ redirect: id })
     }
   }
 
@@ -31,7 +31,7 @@ class UserTable extends React.Component {
             </Table.HeaderCell>
             <Table.HeaderCell>
               Blogs
-            </Table.HeaderCell>         
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -46,7 +46,7 @@ class UserTable extends React.Component {
             </Table.Row>
           )}
         </Table.Body>
-      </Table>      
+      </Table>
     )
   }
 }

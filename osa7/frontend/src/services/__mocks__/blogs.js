@@ -20,6 +20,8 @@ const getAll = () => {
 
 const setToken = (newToken) => {
   token = newToken
+  if( token === 'disableunusedwarning')
+    console.log('')
 }
 
 export default { getAll, blogs, setToken }

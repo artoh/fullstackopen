@@ -12,24 +12,24 @@ class BlogTable extends React.Component {
 
     return (
       <Table celled>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>
             Author
-          </Table.HeaderCell>
-          <Table.HeaderCell>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
             Title
-          </Table.HeaderCell>
-          <Table.HeaderCell>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
             Likes
-          </Table.HeaderCell>          
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        { blogs.map(blog =>
-          <BlogInTable key={blog.id} blog={blog}/>
-        )}
-      </Table.Body>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          { blogs.map(blog =>
+            <BlogInTable key={blog.id} blog={blog}/>
+          )}
+        </Table.Body>
       </Table>
     )
   }

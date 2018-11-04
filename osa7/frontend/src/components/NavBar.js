@@ -6,11 +6,11 @@ import { NavLink } from 'react-router-dom'
 import { logout } from './../reducers/loginReducer'
 
 class NavBar extends React.Component {
-  
+
   doLogout = async () => {
     this.props.logout()
-  }  
-  
+  }
+
   render() {
     return (
       <Menu pointing secondary>
@@ -21,7 +21,7 @@ class NavBar extends React.Component {
           <Button onClick={this.doLogout}>Logout</Button>
         </Menu.Menu>
       </Menu>
-    )    
+    )
   }
 }
 
@@ -31,4 +31,4 @@ const mapStateToProps = (state) => {
     loggedUser: state.login
   }
 }
-export default connect(mapStateToProps,{logout})(NavBar)
+export default connect(mapStateToProps,{ logout })(NavBar)

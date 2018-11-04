@@ -9,7 +9,7 @@ const loginReducer = ( store = null, action) => {
     return null
   default:
     return store
-  }    
+  }
 }
 
 export const login = (creditentials) => {
@@ -17,7 +17,7 @@ export const login = (creditentials) => {
     const user = await loginService.login(creditentials)
     console.log( user )
     if(user.username) {
-      console.log("Jippii")
+      console.log('Jippii')
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch({
@@ -48,7 +48,7 @@ export const storageLogin = () => {
         type: 'LOGIN',
         data: user
       })
-    }  
+    }
   }
 }
 

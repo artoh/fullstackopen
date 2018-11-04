@@ -10,7 +10,7 @@ class LoginForm extends React.Component {
   doLogin = async (event) => {
     console.log('login ', event.target.username.value)
     event.preventDefault()
-    try { 
+    try {
       await this.props.login({
         username: event.target.username.value,
         password: event.target.password.value
@@ -20,7 +20,7 @@ class LoginForm extends React.Component {
       await this.props.notify('Login fail','error')
       console.log(e)
     }
-    
+
   }
 
   render() {
