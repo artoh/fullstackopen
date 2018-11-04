@@ -2,6 +2,7 @@ let token = null
 
 const blogs = [
   {
+    comments: [],
     id: '5521145511114525',
     author: 'Leo Leijona',
     title: 'Leijonien älykkyydestä',

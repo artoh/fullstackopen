@@ -53,7 +53,7 @@ class User extends React.Component {
 }
 
 User.propTypes = {
-  id: PropTypes.number
+  id: PropTypes.string
 }
 
 

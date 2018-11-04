@@ -2,7 +2,6 @@ import blogService from './../services/blogService'
 
 
 const blogReducer = ( store = [], action) => {
-  console.log( action )
   switch(action.type) {
   case 'INIT':
     return action.data
@@ -30,7 +29,7 @@ export const initBlogs = () => {
 export const like = (blog) => {
   return async (dispatch) => {
     blog.likes = blog.likes + 1
-    await blogService.like(blog)
+    await blogService.like(blog)    
     dispatch({
       type: 'PUT',
       data: blog
@@ -60,8 +59,7 @@ export const createBlog = (blog) => {
 
 export const commentBlog = (id, comment) => {
   return async (dispatch) => {
-    const blog = await blogService.comment(id, comment)
-    console.log(blog)
+    const blog = await blogService.comment(id, comment)    
     dispatch({
       type: 'PUT',
       data: blog
