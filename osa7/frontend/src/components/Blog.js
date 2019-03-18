@@ -30,7 +30,7 @@ class Blog extends React.Component {
       return
     }
     this.props.deleteBlog( this.state.id)
-    window.location.replace('/')    
+    window.location.replace('/')
   }
 
   addComment = () => {
@@ -46,9 +46,9 @@ class Blog extends React.Component {
   }
 
   render() {
-   
+
     const blog = this.props.blogs.find( blog => blog.id === this.state.id)
-    
+
     if( !blog) {
       return ( <Loader active inline />)
     }
@@ -67,17 +67,17 @@ class Blog extends React.Component {
           <ul>
             {blog.comments.map(comment => <li key={Math.floor(Math.random()*99999)}> {comment} </li>)}
           </ul>
-          
-          <Input 
-            type='text' 
-            name='comment' 
-            style={{width: '100%'}}
-            placeholder='Write your comment here'    
+
+          <Input
+            type='text'
+            name='comment'
+            style={{ width: '100%' }}
+            placeholder='Write your comment here'
             onChange={ e => this.setState({ newComment : e.target.value }) }
             value={this.state.newComment}
-            action={{ content:'Add comment', onClick:this.addComment }}>              
+            action={{ content:'Add comment', onClick:this.addComment }}>
           </Input>
-        
+
         </div>
       </div>
     )
@@ -91,7 +91,7 @@ Blog.propTypes = {
 const mapStateToProps = (state) => {
   return {
     blogs: state.blogs,
-    user: state.login  
+    user: state.login
   }
 }
 
