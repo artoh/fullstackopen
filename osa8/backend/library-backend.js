@@ -1,6 +1,8 @@
 const { ApolloServer, gql } = require('apollo-server')
 
-const authors = [
+const uuid = require('uuid/v1')
+
+let authors = [
   {
     name: 'Robert Martin',
     id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
@@ -31,7 +33,7 @@ const authors = [
  * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
 */
 
-const books = [
+let books = [
   {
     title: 'Clean Code',
     published: 2008,
@@ -106,6 +108,19 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book]!
     allAuthors: [Author]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!,
+      author: String!,
+      published: Int!,
+      genres: [String]!
+    ) : Book,
+    editAuthor(
+      name: String!,
+      setBornTo: Int!
+    ) : Author
+  }
 `
 
 const resolvers = {
@@ -132,6 +147,29 @@ const resolvers = {
     id: (root) => root.id,
     born: (root) => root.born,
     bookCount: (root) => books.filter( book => book.author === root.name).length
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const newBook = { ...args, id: uuid() }
+      books = books.concat(newBook)
+
+      if( !authors.find( a => a.name === args.author)) {
+        const newAuthor = { name: args.author, id: uuid()}
+        authors = authors.concat( newAuthor)
+      }
+
+      return newBook
+    },
+    editAuthor: (root, args) => {
+      const author = authors.find( a => a.name === args.name)
+      if( !author ) {
+        return null
+      }
+
+      const updatedAuthor = {...author, born: args.setBornTo }
+      authors = authors.map( a => a.name === args.name ? updatedAuthor : a)
+      return updatedAuthor
+    }
   }
 }
 
