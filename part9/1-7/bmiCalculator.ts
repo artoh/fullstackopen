@@ -31,9 +31,13 @@ const parseArguments = (args: Array<String>): BmiValues => {
   }
 }
 
+/*
 try {
   const { height, weight } = parseArguments(process.argv)
   console.log(calculateBmi(height, weight))
 } catch (e) {
   console.log(e.stack)
 }
+*/
+
+export { calculateBmi }
