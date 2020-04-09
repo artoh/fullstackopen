@@ -8,4 +8,8 @@ router.get("/", (_req, res) => {
   res.send(patientService.getNonSensitivePatients());
 });
 
+router.post("/", (req, res) => {
+  res.send(patientService.addPatient(req.body));
+});
+
 export default router;
