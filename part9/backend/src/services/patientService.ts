@@ -5,13 +5,18 @@ import toNewPatient from "../utils";
 import { NonSensitivePatient, NewPatient, Patient } from "../types";
 
 const getNonSensitivePatients = (): NonSensitivePatient[] => {
-  return patients;
+  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+    id,
+    name,
+    dateOfBirth,
+    gender,
+    occupation,
+  }));
 };
 
 const addPatient = (patient: NewPatient): NonSensitivePatient => {
   const newPatient = {
     id: uuid(),
-    entries: [],
     ...toNewPatient(patient),
   };
   patients.push(newPatient);
