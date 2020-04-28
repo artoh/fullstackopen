@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from "./types";
+import { Gender } from "./types";
 
 const isString = (text: any): text is string => {
   return typeof text === "string";
