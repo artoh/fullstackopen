@@ -44,7 +44,7 @@ const parseSsn = (ssn: any): string => {
   return ssn;
 };
 
-const toNewPatient = (object: any) => {
+export const toNewPatient = (object: any) => {
   return {
     name: parseString(object.name),
     dateOfBirth: parseDate(object.dateOfBirth),
@@ -54,4 +54,35 @@ const toNewPatient = (object: any) => {
   };
 };
 
-export default toNewPatient;
+export const checkEntry = (object: any) => {
+  parseDate(object.date);
+  parseString(object.description);
+  parseString(object.specialist);
+
+  switch (object.type) {
+    case "Hospital":
+      if (object.dischage === undefined) throw new Error("Discharge missing");
+      parseDate(object.dischage.date);
+      parseString(object.dischage.criteria);
+      break;
+    case "OccupationalHealthcare":
+      parseString(object.employerName);
+      if (object.sickLeave) {
+        parseDate(object.sickLeave.startDate);
+        parseDate(object.sickLeave.endDate);
+      }
+      break;
+    case "HealthCheckEntry":
+      if (
+        isNaN(object.healthCheckRating) ||
+        object.healthCheckRating < 0 ||
+        object.healthCheckRating > 3
+      )
+        throw new Error(
+          "Malformatted or missing health rate " + object.healthCheckRating
+        );
+      break;
+    default:
+      throw new Error("Unknown type " + object.type);
+  }
+};

@@ -56,6 +56,8 @@ export type Entry =
   | HospitalEntry
   | OccupationalHeathcareEntry;
 
+export type NewEntry = Omit<Entry, "id">;
+
 export interface Patient {
   id: string;
   name: string;
