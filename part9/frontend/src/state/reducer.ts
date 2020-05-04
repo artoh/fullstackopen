@@ -1,5 +1,11 @@
-import { State } from "./state";
-import { Patient, Diagnosis } from "../types";
+import { State, StateContext } from "./state";
+import { Patient, Diagnosis, Entry } from "../types";
+import { CommentAction } from "semantic-ui-react";
+
+interface AddEntryPayload {
+  id: string;
+  entry: Entry;
+}
 
 export type Action =
   | {
@@ -13,6 +19,10 @@ export type Action =
   | {
       type: "SET_DIAGNOSES_LIST";
       payload: Diagnosis[];
+    }
+  | {
+      type: "ADD_ENTRY";
+      payload: AddEntryPayload;
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -39,12 +49,15 @@ export const reducer = (state: State, action: Action): State => {
     case "SET_DIAGNOSES_LIST":
       return {
         ...state,
-        diagnoses: {
-          ...action.payload.reduce(
-            (memo, diagnosis) => ({ ...memo, [diagnosis.code]: diagnosis }),
-            {}
-          ),
-        },
+        diagnoses: action.payload,
+      };
+    case "ADD_ENTRY":
+      const patients = state.patients;
+      const patient = patients[action.payload.id];
+      patient.entries.push(action.payload.entry);
+      return {
+        ...state,
+        patients: patients,
       };
     default:
       return state;
@@ -69,5 +82,12 @@ export const setDiagnoseList = (diagnoses: Diagnosis[]): Action => {
   return {
     type: "SET_DIAGNOSES_LIST",
     payload: diagnoses,
+  };
+};
+
+export const addEntry = (patientId: string, entry: Entry): Action => {
+  return {
+    type: "ADD_ENTRY",
+    payload: { id: patientId, entry: entry },
   };
 };

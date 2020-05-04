@@ -4,6 +4,21 @@ import { Segment, Icon } from "semantic-ui-react";
 import DiagnoseList from "./DiagnoseList";
 import HealthRatingBar from "../components/HealthRatingBar";
 
+const colorForHealth = (level: number): any => {
+  switch (level) {
+    case 0:
+      return "green";
+    case 1:
+      return "yellow";
+    case 2:
+      return "orange";
+    case 3:
+      return "red";
+    default:
+      return "black";
+  }
+};
+
 const HealthCheckDetails: React.FC<{ entry: HealthCheckEntry }> = ({
   entry,
 }) => {
@@ -11,11 +26,11 @@ const HealthCheckDetails: React.FC<{ entry: HealthCheckEntry }> = ({
     <Segment>
       <h5>
         {entry.date}
-        <Icon name="hospital" />
+        <Icon name="stethoscope" />
         {entry.specialist}
       </h5>
       <p>{entry.description}</p>
-      <HealthRatingBar rating={entry.healthCheckRating} showText={true} />
+      <Icon name="heart" color={colorForHealth(entry.healthCheckRating)} />
       <DiagnoseList entry={entry} />
     </Segment>
   );

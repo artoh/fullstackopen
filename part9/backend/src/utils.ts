@@ -72,7 +72,7 @@ export const checkEntry = (object: any) => {
         parseDate(object.sickLeave.endDate);
       }
       break;
-    case "HealthCheckEntry":
+    case "HealthCheck":
       if (
         isNaN(object.healthCheckRating) ||
         object.healthCheckRating < 0 ||

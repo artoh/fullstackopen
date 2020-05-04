@@ -12,7 +12,7 @@ const DiagnoseList: React.FC<{ entry: Entry }> = ({ entry }) => {
     <ul>
       {entry.diagnosisCodes.map((code) => (
         <li key={code}>
-          {code} {diagnoses[code] && diagnoses[code].name}
+          {code} {diagnoses.find((d) => d.code === code)?.name}
         </li>
       ))}
     </ul>
