@@ -86,3 +86,11 @@ export const BOOK_ADDED = gql`
   }
   ${BOOK_DETAILS}
 `
+export const USER_ME = gql`
+  query {
+    me {
+      username
+      favoriteGenre
+    }
+  }
+`

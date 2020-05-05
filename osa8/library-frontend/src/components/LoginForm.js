@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react"
-import { useMutation } from "@apollo/client"
-import { LOGIN } from "./queries"
+import { useMutation, useQuery } from "@apollo/client"
+import { LOGIN, USER_ME } from "./queries"
 
 const LoginForm = ({ setToken, show, setPage }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const [login, result] = useMutation(LOGIN, {
-    onError: error => {
+    onError: (error) => {
       console.log(error.graphQLErrors[0].message)
-    }
+    },
   })
+
+  const meResult = useQuery(USER_ME)
 
   useEffect(() => {
     if (result.data) {
@@ -18,8 +20,10 @@ const LoginForm = ({ setToken, show, setPage }) => {
       setToken(token)
       localStorage.setItem("library-user-token", token)
     }
+    if (meResult.data && meResult.data.me)
+      localStorage.setItem("library-genre", meResult.data.me.favoriteGenre)
   })
-  const submit = async event => {
+  const submit = async (event) => {
     event.preventDefault()
     login({ variables: { username, password } })
     setPage("authors")
