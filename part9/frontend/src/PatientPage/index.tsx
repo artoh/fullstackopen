@@ -12,7 +12,6 @@ import EntryDetails from "./EntryDetails";
 import { addOrUpdatePatient, addEntry } from "../state/reducer";
 
 import { AddHealthCheck, HeathCheckValues } from "./AddHealthCheck";
-import { Z_STREAM_ERROR } from "zlib";
 
 const PatientPage: React.FC = () => {
   const { id } = useParams();

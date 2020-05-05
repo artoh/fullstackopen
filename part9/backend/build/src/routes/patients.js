@@ -12,4 +12,16 @@ router.get("/", (_req, res) => {
 router.post("/", (req, res) => {
     res.send(patientService_1.default.addPatient(req.body));
 });
+router.get("/:id", (req, res) => {
+    res.send(patientService_1.default.getPatient(req.params.id));
+});
+router.post("/:id/entries", (req, res) => {
+    try {
+        res.send(patientService_1.default.addEntry(req.params.id, req.body));
+    }
+    catch (e) {
+        console.log(e);
+        res.status(500).send({ error: e.message });
+    }
+});
 exports.default = router;

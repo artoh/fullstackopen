@@ -1,4 +1,5 @@
-import { Gender } from "./types";
+import { Gender, HealthCheckRating, Entry, Diagnose } from "./types";
+import { v1 as uuid } from "uuid";
 
 const isString = (text: any): text is string => {
   return typeof text === "string";
@@ -44,6 +45,20 @@ const parseSsn = (ssn: any): string => {
   return ssn;
 };
 
+const parseRating = (rating: any): HealthCheckRating => {
+  if (Object.values(HealthCheckRating).includes(rating))
+    throw new Error("Incorrect or missing rating " + rating);
+  return rating;
+};
+
+const parseCodes = (codes: any): Array<Diagnose["code"]> => {
+  const newcodes: Array<Diagnose["code"]> = [];
+  for (let i = 0; i < codes.length; i++) {
+    newcodes.push(parseString(codes[i]));
+  }
+  return newcodes;
+};
+
 export const toNewPatient = (object: any) => {
   return {
     name: parseString(object.name),
@@ -52,6 +67,50 @@ export const toNewPatient = (object: any) => {
     gender: parseGender(object.gender),
     occupation: parseString(object.occupation),
   };
+};
+
+export const toNewEntry = (object: any): Entry => {
+  switch (object.type) {
+    case "Hospital":
+      return {
+        id: uuid(),
+        type: object.type,
+        date: parseDate(object.date),
+        description: parseString(object.description),
+        specialist: parseDate(object.description),
+        diagnosisCodes: parseCodes(object.diagnosisCodes),
+        discharge: {
+          date: parseDate(object.dischage.date),
+          criteria: parseString(object.dischage.criteria),
+        },
+      };
+    case "OccupationalHealtcare":
+      return {
+        id: uuid(),
+        type: object.type,
+        date: parseDate(object.date),
+        description: parseString(object.description),
+        specialist: parseDate(object.description),
+        diagnosisCodes: parseCodes(object.diagnosisCodes),
+        employerName: parseDate(object.employerName),
+        sickLeave: {
+          startDate: parseDate(object.sickLeave.startDate),
+          endDate: parseDate(object.sickLeave.endDate),
+        },
+      };
+    case "HealtCheck":
+      return {
+        id: uuid(),
+        type: object.type,
+        date: parseDate(object.date),
+        description: parseString(object.description),
+        specialist: parseDate(object.description),
+        diagnosisCodes: parseCodes(object.diagnosisCodes),
+        healthCheckRating: parseRating(object.healthCheckRating),
+      };
+    default:
+      throw new Error("Unknow type " + object.type);
+  }
 };
 
 export const checkEntry = (object: any) => {
@@ -67,10 +126,10 @@ export const checkEntry = (object: any) => {
       break;
     case "OccupationalHealthcare":
       parseString(object.employerName);
-      if (object.sickLeave) {
-        parseDate(object.sickLeave.startDate);
-        parseDate(object.sickLeave.endDate);
-      }
+      if (object.sickLeave === undefined) throw new Error("Sick Leave missing");
+      parseDate(object.sickLeave.startDate);
+      parseDate(object.sickLeave.endDate);
+
       break;
     case "HealthCheck":
       if (

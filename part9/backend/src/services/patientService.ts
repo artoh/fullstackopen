@@ -1,6 +1,6 @@
 import patients from "../../data/patients";
 import { v1 as uuid } from "uuid";
-import { toNewPatient, checkEntry } from "../utils";
+import { toNewPatient, toNewEntry } from "../utils";
 
 import {
   NonSensitivePatient,
@@ -30,11 +30,10 @@ const addPatient = (patient: NewPatient): NonSensitivePatient => {
   return newPatient;
 };
 
-const addEntry = (patientId: string, entry: NewEntry) => {
-  checkEntry(entry);
-  const myEntry = {
-    id: uuid,
-    ...entry,
+const addEntry = (patientId: string, entry: NewEntry): Entry => {
+  //  checkEntry(entry);
+  const myEntry: Entry = {
+    ...toNewEntry(entry),
   };
   const patient = patients.find((p) => p.id == patientId);
   if (patient === undefined) throw new Error("Patient not found");
